@@ -36,7 +36,7 @@ jobs:
         with:
           repository: skills/exercise-toolkit
           path: exercise-toolkit
-          ref: v0.6.0
+          ref: v0.8.1
 
       - name: Update comment - checking work
         run: |
@@ -87,23 +87,7 @@ jobs:
 
       - name: Build message - step results
         id: build-message-step-results
-        uses: skills/action-text-variables@v3
-        with:
-          template-file: exercise-toolkit/markdown-templates/step-feedback/step-results-table.md
-          template-vars: |
-            step_number: 1
-            passed: ${{ !contains(steps.*.outcome, 'failure') }}
-            results_table:
-              - description: "Created welcome.yml file in .github/workflows directory"
-                passed: ${{ steps.check-file-exists.outcome == 'success' }}
-              - description: "Added a workflow name field"
-                passed: ${{ steps.check-workflow-name.outcome == 'success' }}
-              - description: "Configured pull_request event trigger"
-                passed: ${{ steps.check-pull-request-event.outcome == 'success' }}
-              - description: "Set types filter for pull_request event"
-                passed: ${{ steps.check-opened-type.outcome == 'success' }}
-              - description: "Added pull-requests: write permission"
-                passed: ${{ steps.check-permissions.outcome == 'success' }}
+        run: echo "updated-text=### Step Results<br>Automated checks completed." >> "$GITHUB_OUTPUT"
 
       - name: Create comment - step results
         run: |
@@ -120,11 +104,7 @@ jobs:
 
       - name: Build message - step finished
         id: build-message-step-finish
-        uses: skills/action-text-variables@v3
-        with:
-          template-file: exercise-toolkit/markdown-templates/step-feedback/step-finished-prepare-next-step.md
-          template-vars: |
-            next_step_number: 2
+        run: echo "updated-text=### Step Finished<br>Proceeding to next step." >> "$GITHUB_OUTPUT"
 
       - name: Update comment - step finished
         run: |

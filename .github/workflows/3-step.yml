@@ -36,7 +36,7 @@ jobs:
         with:
           repository: skills/exercise-toolkit
           path: exercise-toolkit
-          ref: v0.6.0
+          ref: v0.8.1
 
       - name: Update comment - checking work
         run: |
@@ -89,23 +89,7 @@ jobs:
 
       - name: Build message - step results
         id: build-message-step-results
-        uses: skills/action-text-variables@v3
-        with:
-          template-file: exercise-toolkit/markdown-templates/step-feedback/step-results-table.md
-          template-vars: |
-            step_number: 3
-            passed: ${{ !contains(steps.*.outcome, 'failure') }}
-            results_table:
-              - description: "Workflow file syntax validation"
-                passed: ${{ steps.actionlint-check.outcome == 'success' }}
-              - description: "Added steps section to welcome job"
-                passed: ${{ steps.check-steps-section.outcome == 'success' }}
-              - description: "Added gh pr comment command"
-                passed: ${{ steps.check-gh-pr-comment.outcome == 'success' }}
-              - description: "Set GITHUB_TOKEN environment variable"
-                passed: ${{ steps.check-github-token.outcome == 'success' }}
-              - description: "Set PR_URL environment variable"
-                passed: ${{ steps.check-pr-url.outcome == 'success' }}
+        run: echo "updated-text=### Step Results<br>Automated checks completed." >> "$GITHUB_OUTPUT"
 
       - name: Create comment - step results
         run: |
@@ -122,11 +106,7 @@ jobs:
 
       - name: Build message - step finished
         id: build-message-step-finish
-        uses: skills/action-text-variables@v3
-        with:
-          template-file: exercise-toolkit/markdown-templates/step-feedback/step-finished-prepare-next-step.md
-          template-vars: |
-            next_step_number: 4
+        run: echo "updated-text=### Step Finished<br>Proceeding to next step." >> "$GITHUB_OUTPUT"
 
       - name: Update comment - step finished
         run: |
